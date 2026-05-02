@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <link rel="manifest" href="manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AP — Aprendizado com IA</title>
@@ -68,7 +69,6 @@
     .terms-box.error { color: #ff4d4d; transform: scale(1.05); opacity: 1; }
     .google-btn { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); cursor: pointer; margin-bottom: 15px; font-weight: bold; }
 
-    /* NOVA ANIMAÇÃO DE ZOOM */
     .splash-screen {
       position: fixed; inset: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999;
     }
@@ -82,6 +82,16 @@
       0% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.5); opacity: 1; }
       100% { transform: scale(40); opacity: 0; visibility: hidden; }
+    }
+
+    /* Responsividade para Celular */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 32px; }
+      .hero p { font-size: 16px; }
+      header { padding: 15px 20px; }
+      .login-box { margin: 20px; padding: 25px; width: 90%; }
+      .grid { grid-template-columns: 1fr; }
+      .ap-animation { font-size: 60px; }
     }
   </style>
 </head>
@@ -177,7 +187,6 @@
       const termos = document.getElementById('termos-check');
       const label = document.getElementById('terms-label');
 
-      
       if (!termos.checked) {
         label.classList.add('error');
         setTimeout(() => label.classList.remove('error'), 2000);
@@ -209,7 +218,6 @@
   </script>
 
   <script>
-    
     window.addEventListener('load', () => {
       setTimeout(() => { 
         document.getElementById('splash').style.display = 'none';
