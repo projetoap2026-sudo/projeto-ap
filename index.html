@@ -33,7 +33,7 @@
 
     body.bold-text * { font-weight: bold !important; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; transition: 0.3s ease; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: 0.3s ease; }
     body { background: var(--bg); color: var(--text); min-height: 100vh; font-size: calc(16px * var(--font-scale)); overflow-x: hidden; }
 
     header {
@@ -42,56 +42,49 @@
       position: sticky; top: 0; background: var(--bg); backdrop-filter: blur(12px); z-index: 100;
     }
 
-    .logo { text-shadow: 0 0 12px var(--accent); font-size: 28px; font-weight: bold; color: var(--accent); cursor: pointer; }
+    .logo { font-size: 28px; font-weight: bold; color: var(--accent); cursor: pointer; text-shadow: 0 0 10px rgba(124, 108, 255, 0.3); }
 
-    
+    .nav-btns { display: flex; gap: 10px; align-items: center; }
+    .btn-auth { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; font-weight: 600; background: var(--card); color: var(--text); }
+    .btn-primary { background: var(--accent); color: white; border: none; }
+
     .user-profile { display: flex; align-items: center; gap: 15px; position: relative; cursor: pointer; }
-    .user-photo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+    .user-photo { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
     
     .dropdown {
       position: absolute; top: 55px; right: 0; background: var(--card); 
-      border: 1px solid var(--border); border-radius: 12px; width: 240px;
-      display: none; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border: 1px solid var(--border); border-radius: 15px; width: 240px;
+      display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1000;
       overflow: hidden;
     }
     .dropdown.active { display: flex; }
-    .dropdown button { 
-      padding: 14px; border: none; background: transparent; text-align: left; 
-      color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px;
-    }
+    .dropdown button { padding: 14px; border: none; background: transparent; text-align: left; color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; }
     .dropdown button:hover { background: var(--accent); color: white; }
 
-    
-    .view { display: none; padding: 40px 20px; max-width: 1200px; margin: auto; animation: fadeIn 0.5s ease; }
+    .view { display: none; padding: 40px 20px; max-width: 1000px; margin: auto; animation: fadeIn 0.4s ease-out; }
     .view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    
-    .chat-box { max-width: 800px; margin: 20px auto; background: var(--card); border-radius: 20px; border: 1px solid var(--border); height: 500px; display: flex; flex-direction: column; }
-    #chat-log { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-    .bubble { padding: 12px 18px; border-radius: 18px; max-width: 85%; font-size: 15px; line-height: 1.5; }
-    .ai-b { background: var(--bg); align-self: flex-start; border: 1px solid var(--border); white-space: pre-wrap; }
-    .user-b { background: var(--accent); color: white; align-self: flex-end; }
-    .input-row { display: flex; padding: 15px; gap: 10px; border-top: 1px solid var(--border); }
-    input[type="text"] { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-
-   
-    .config-card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px; }
-    .config-card h3 { margin-bottom: 15px; color: var(--accent); }
-    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-    .btn-opt { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; }
-    .btn-opt:hover { border-color: var(--accent); }
-
-   
-    .splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-    .ap-animation { font-size: 90px; font-weight: bold; color: var(--accent); text-shadow: 0 0 30px var(--accent); animation: zoomOut 2.5s forwards ease-in-out; }
-    @keyframes zoomOut { 0% { transform: scale(1); } 100% { transform: scale(60); opacity: 0; visibility: hidden; } }
-
-    @media (max-width: 600px) {
-      header { padding: 15px 20px; }
-      .view { padding: 20px 10px; }
-      .ap-animation { font-size: 60px; }
+    .chat-box { 
+      background: var(--card); border-radius: 24px; border: 1px solid var(--border); 
+      height: 60vh; min-height: 400px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
+    #chat-log { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+    .bubble { padding: 12px 18px; border-radius: 18px; max-width: 85%; font-size: 15px; line-height: 1.5; }
+    .ai-b { background: var(--bg); align-self: flex-start; border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+    .user-b { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+    .input-row { display: flex; padding: 20px; gap: 12px; border-top: 1px solid var(--border); background: var(--card); border-radius: 0 0 24px 24px; }
+    input[type="text"] { flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; }
+    input[type="text"]:focus { border-color: var(--accent); }
+    .btn-send { padding: 0 24px; background: var(--accent); color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: bold; }
+
+    .splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    .ap-animation { font-size: 90px; font-weight: bold; color: var(--accent); animation: zoomOut 2.2s forwards cubic-bezier(0.4, 0, 0.2, 1); }
+    @keyframes zoomOut { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(60); opacity: 0; visibility: hidden; } }
+
+    .config-card { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid var(--border); margin-top: 20px; }
+    .config-btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 15px 0; }
   </style>
 </head>
 <body class="dark-mode">
@@ -100,80 +93,86 @@
 
   <header>
     <div class="logo" onclick="switchView('home')">AP</div>
-    <nav id="nav-menu">
-      <button onclick="switchView('home')">Início</button>
-      <button onclick="switchView('dashboard')">Painel de IA</button>
-      <button id="login-btn" onclick="switchView('login')" style="background: var(--accent); color: white; padding: 8px 18px; border-radius: 10px; border: none;">Fazer Login</button>
+    
+    <div id="auth-area" class="nav-btns">
+      <div id="logged-out-btns" style="display: flex; gap: 10px;">
+        <button class="btn-auth" onclick="switchView('login')">Fazer Login</button>
+        <button class="btn-auth btn-primary" onclick="switchView('login')">Criar Conta</button>
+      </div>
       
       <div class="user-profile" id="user-ui" style="display: none;" onclick="toggleDropdown()">
         <img src="" id="pfp" class="user-photo">
         <div class="dropdown" id="user-menu">
+          <button onclick="switchView('dashboard')">🚀 Painel de IA</button>
           <button onclick="switchView('config')">⚙️ Configurações</button>
           <button onclick="loginGoogle()">➕ Adicionar Conta</button>
-          <button onclick="switchView('login')">🔄 Trocar de Perfil</button>
           <button onclick="logout()" style="color: #ff4d4d;">🚪 Sair</button>
         </div>
       </div>
-    </nav>
+    </div>
   </header>
 
  
   <div id="home" class="view">
-    <div style="text-align: center; margin-top: 60px;">
-      <h1>Sua Jornada com IA começa aqui.</h1>
-      <p style="opacity: 0.7; margin-top: 15px;">Acesse o Painel de IA para roteiros de Programação, ENEM e muito mais.</p>
-      <button onclick="switchView('login')" class="btn-opt" style="margin-top: 30px; background: var(--accent); color: white; border: none; padding: 15px 30px;">Começar Agora</button>
+    <div style="text-align: center; margin-top: 80px;">
+      <h1 style="font-size: 42px; margin-bottom: 20px;">Evolua seu aprendizado</h1>
+      <p style="opacity: 0.7; font-size: 18px; max-width: 600px; margin: auto;">Plataforma inteligente para estudantes de Programação, ENEM e Segurança Digital.</p>
+      <button class="btn-auth btn-primary" style="margin-top: 40px; padding: 18px 40px; font-size: 16px;" onclick="switchView('login')">Começar Agora</button>
     </div>
   </div>
 
   
   <div id="login" class="view active">
-    <div style="max-width: 400px; margin: 40px auto; text-align: center; background: var(--card); padding: 40px; border-radius: 25px; border: 1px solid var(--border);">
-      <h2>Acesse sua Conta</h2>
-      <p style="font-size: 14px; opacity: 0.6; margin-bottom: 30px;">Entre para salvar seu progresso e configurações.</p>
-      <button onclick="loginGoogle()" class="google-btn" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border-radius: 12px; background: var(--bg); color: var(--text); border: 1px solid var(--border); cursor: pointer; font-weight: bold;">
-        🌐 Entrar com Google
+    <div style="max-width: 400px; margin: 40px auto; text-align: center; background: var(--card); padding: 40px; border-radius: 28px; border: 1px solid var(--border);">
+      <h2 style="margin-bottom: 10px;">Bem-vindo ao AP</h2>
+      <p style="opacity: 0.6; font-size: 14px; margin-bottom: 30px;">Crie sua conta ou faça login para continuar.</p>
+      
+      <button onclick="loginGoogle()" style="width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--border); cursor: pointer; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600;">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Entrar com Google
       </button>
-      <div style="margin-top: 20px; font-size: 12px; opacity: 0.5;">
-        Ao entrar, você concorda com nossos Termos de Uso.
+
+      <div style="margin-top: 25px; font-size: 12px; opacity: 0.5;">
+        Protegido pelo sistema AP de Cybersecurity.
       </div>
     </div>
   </div>
 
   
   <div id="dashboard" class="view">
-    <h2 style="text-align: center; margin-bottom: 10px;">Tutor Inteligente AP</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-size: 24px;">Tutor Digital</h2>
+        <span style="font-size: 12px; padding: 5px 12px; background: rgba(124,108,255,0.1); color: var(--accent); border-radius: 20px; font-weight: bold;">Gemini 1.5 Flash</span>
+    </div>
+    
     <div class="chat-box">
       <div id="chat-log">
-        <div class="bubble ai-b">Olá! Sou sua inteligência artificial. Como posso ajudar seus estudos hoje?</div>
+        <div class="bubble ai-b">Olá! Sou seu tutor assistente. No que posso te ajudar hoje?</div>
       </div>
       <div class="input-row">
-        <input type="text" id="user-prompt" placeholder="Digite sua dúvida aqui...">
-        <button onclick="perguntarIA()" style="background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Enviar</button>
+        <input type="text" id="user-prompt" placeholder="Digite sua dúvida ou peça um roteiro de estudo...">
+        <button class="btn-send" onclick="perguntarIA()">Enviar</button>
       </div>
     </div>
   </div>
 
   
   <div id="config" class="view">
-    <h2 style="margin-bottom: 25px;">Configurações</h2>
-    
+    <h2>Configurações</h2>
     <div class="config-card">
-      <h3>Personalização de Tema</h3>
-      <div class="btn-group">
-        <button class="btn-opt" onclick="updateTheme('dark')">🌙 Modo Escuro</button>
-        <button class="btn-opt" onclick="updateTheme('light')">☀️ Modo Claro</button>
-        <button class="btn-opt" onclick="updateTheme('papel')">📄 Modo Papel</button>
-      </div>
-    </div>
-
-    <div class="config-card">
-      <h3>Acessibilidade</h3>
-      <div class="btn-group">
-        <button class="btn-opt" onclick="document.body.classList.toggle('bold-text')"><b>B</b> Negrito</button>
-      </div>
-      <label style="display: block; margin-bottom: 10px;">Tamanho da Fonte:</label>
-      <input type="range" min="0.8" max="1.5" step="0.1" value="1" style="width: 100%;" onchange="updateFontScale(this.value)">
+        <p style="font-weight: 600; margin-bottom: 10px;">Temas Visuais</p>
+        <div class="config-btn-grid">
+            <button class="btn-auth" onclick="setTheme('dark')">🌙 Escuro</button>
+            <button class="btn-auth" onclick="setTheme('light')">☀️ Claro</button>
+            <button class="btn-auth" onclick="setTheme('papel')">📄 Papel</button>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 25px 0;">
+        
+        <p style="font-weight: 600; margin-bottom: 10px;">Acessibilidade</p>
+        <button class="btn-auth" style="width: 100%; margin-bottom: 15px;" onclick="document.body.classList.toggle('bold-text')">Alternar Texto em Negrito</button>
+        
+        <label style="font-size: 14px; opacity: 0.7;">Tamanho da Letra:</label>
+        <input type="range" min="0.8" max="1.4" step="0.1" value="1" style="width: 100%; margin-top: 10px;" onchange="setFontScale(this.value)">
     </div>
   </div>
 
@@ -195,98 +194,87 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
-    const provider = new GoogleAuthProvider();
+    const prov = new GoogleAuthProvider();
+    
+    
     const GEMINI_KEY = "AIzaSyCayMIED-wA52Sh2UKIKDo8acJHX1GjBfQ";
 
     window.loginGoogle = async () => {
       try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        await set(ref(db, 'alunos/' + user.uid), {
-          nome: user.displayName,
-          email: user.email,
-          foto: user.photoURL,
-          ultimoAcesso: serverTimestamp()
+        const res = await signInWithPopup(auth, prov);
+        await set(ref(db, 'alunos/' + res.user.uid), { 
+          nome: res.user.displayName, 
+          email: res.user.email, 
+          foto: res.user.photoURL, 
+          lastAccess: serverTimestamp() 
         });
         switchView('dashboard');
-      } catch (e) { console.error("Erro Login:", e); }
+      } catch (e) { console.error(e); }
     };
 
     window.logout = () => signOut(auth).then(() => location.reload());
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('logged-out-btns').style.display = 'none';
         document.getElementById('user-ui').style.display = 'flex';
         document.getElementById('pfp').src = user.photoURL;
-      } else {
-        document.getElementById('login-btn').style.display = 'block';
-        document.getElementById('user-ui').style.display = 'none';
       }
     });
 
     window.perguntarIA = async () => {
-      const input = document.getElementById('user-prompt');
+      const p = document.getElementById('user-prompt');
       const log = document.getElementById('chat-log');
-      const prompt = input.value;
-      if (!prompt) return;
+      const msg = p.value;
+      if(!msg) return;
 
-      log.innerHTML += `<div class="bubble user-b">${prompt}</div>`;
-      input.value = "";
+      log.innerHTML += `<div class="bubble user-b">${msg}</div>`;
+      p.value = "";
       log.scrollTop = log.scrollHeight;
 
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: `Responda como um tutor educacional do sistema AP: ${prompt}` }] }] })
+          body: JSON.stringify({ contents: [{ parts: [{ text: `Você é um tutor educacional moderno para estudantes de João Pessoa e do Brasil. Ajude de forma clara: ${msg}` }] }] })
         });
+        
         const data = await res.json();
-        const texto = data.candidates[0].content.parts[0].text;
-        log.innerHTML += `<div class="bubble ai-b">${texto}</div>`;
+        const responseText = data.candidates[0].content.parts[0].text;
+        log.innerHTML += `<div class="bubble ai-b">${responseText}</div>`;
       } catch (e) {
-        log.innerHTML += `<div class="bubble ai-b">Erro na conexão com a IA. Verifique sua chave.</div>`;
+        log.innerHTML += `<div class="bubble ai-b" style="color: #ff4d4d;">⚠️ Conexão falhou. Verifique se sua chave API Studio está ativa.</div>`;
       }
       log.scrollTop = log.scrollHeight;
     };
   </script>
 
   <script>
-    function switchView(id) {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      const target = document.getElementById(id);
-      if(target) target.classList.add('active');
+    function switchView(id) { 
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
+      document.getElementById(id).classList.add('active'); 
       window.scrollTo({top: 0, behavior: 'smooth'});
     }
-
-    function toggleDropdown() { document.getElementById('user-menu').classList.toggle('active'); }
     
-    function updateTheme(mode) {
+    function toggleDropdown() { document.getElementById('user-menu').classList.toggle('active'); }
+    function setFontScale(v) { document.documentElement.style.setProperty('--font-scale', v); }
+    
+    function setTheme(m) {
       document.body.classList.remove('dark-mode', 'modo-leitura');
-      if (mode === 'dark') document.body.classList.add('dark-mode');
-      if (mode === 'papel') document.body.classList.add('modo-leitura');
+      if(m === 'dark') document.body.classList.add('dark-mode');
+      if(m === 'papel') document.body.classList.add('modo-leitura');
     }
-
-    function updateFontScale(val) { document.documentElement.style.setProperty('--font-scale', val); }
 
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('splash').style.display = 'none';
-        
-        const auth = document.getElementById('user-ui').style.display;
-        if (auth === 'flex') switchView('dashboard');
-      }, 2500);
+      setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2200);
     });
 
-   
-    window.onclick = function(event) {
-      if (!event.target.matches('.user-photo')) {
-        const dropdowns = document.getElementsByClassName("dropdown");
-        for (let i = 0; i < dropdowns.length; i++) {
-          if (dropdowns[i].classList.contains('active')) dropdowns[i].classList.remove('active');
+    
+    window.addEventListener('click', (e) => {
+        if (!document.getElementById('user-ui').contains(e.target)) {
+            document.getElementById('user-menu').classList.remove('active');
         }
-      }
-    }
+    });
   </script>
 </body>
 </html>
