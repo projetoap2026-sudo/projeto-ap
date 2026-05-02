@@ -1,1 +1,17 @@
-
+{
+  "name": "AP — Aprendizado com IA",
+  "short_name": "AP",
+  "description": "Sistema de aprendizado guiado por IA para estudantes.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#7c6cff",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/5278/5278402.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
