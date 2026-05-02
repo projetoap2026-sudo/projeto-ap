@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="manifest" href="manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AP — Aprendizado com IA</title>
@@ -13,174 +12,103 @@
       --text: #f5f5f5;
       --accent: #7c6cff;
       --border: rgba(255,255,255,0.08);
-      --font-scale: 1;
       --error: #ff4d4d;
     }
-
-    body.light-mode {
-      --bg: #ffffff;
-      --card: #f4f4f4;
-      --text: #111111;
-      --accent: #4f46e5;
-      --border: rgba(0,0,0,0.08);
-    }
-
-    body.modo-leitura {
-      --bg: #fffcf5;
-      --text: #1a1a1a;
-      --card: #ffffff;
-      --accent: #000000;
-    }
-
-    body.bold-text * { font-weight: bold !important; }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: 0.3s ease; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; font-size: calc(16px * var(--font-scale)); overflow-x: hidden; }
-
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 40px;
-      position: sticky; top: 0; background: transparent; z-index: 100;
-    }
-
-    .logo { font-size: 28px; font-weight: bold; color: var(--accent); cursor: pointer; text-shadow: 0 0 10px rgba(124, 108, 255, 0.3); }
-
-    .btn-auth { padding: 12px 24px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; font-weight: 600; background: var(--card); color: var(--text); text-decoration: none; display: inline-block; }
-    .btn-primary { background: var(--accent); color: white; border: none; }
-
-    .view { display: none; padding: 40px 20px; max-width: 1000px; margin: auto; animation: fadeIn 0.4s ease-out; }
-    .view.active { display: block; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.3s; }
+    body { background: var(--bg); color: var(--text); }
     
-    #login { 
-        position: fixed; inset: 0; z-index: 500; background: var(--bg);
-        display: none; align-items: center; justify-content: center;
+    .view { display: none; padding: 40px 20px; max-width: 500px; margin: auto; }
+    .view.active { display: block; }
+
+    .card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
+    input, select { 
+        width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; 
+        border: 1px solid var(--border); background: #000; color: #fff; 
     }
-    #login.active { display: flex; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+    button { 
+        width: 100%; padding: 14px; border-radius: 10px; border: none; 
+        background: var(--accent); color: #fff; font-weight: bold; cursor: pointer; margin-top: 10px;
     }
-
-    .login-card { 
-        max-width: 400px; width: 90%; text-align: center; background: var(--card); 
-        padding: 40px; border-radius: 28px; border: 1px solid var(--border);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    }
-
-    .terms-container {
-        margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 10px;
-        font-size: 13px; opacity: 0.8; padding: 10px; border-radius: 10px;
-    }
-    .terms-container.error { color: var(--error); animation: shake 0.4s ease-in-out; border: 1px solid var(--error); }
-
-    .chat-box { background: var(--card); border-radius: 24px; border: 1px solid var(--border); height: 65vh; display: flex; flex-direction: column; }
-    #chat-log { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-    .bubble { padding: 12px 18px; border-radius: 18px; max-width: 85%; font-size: 15px; }
-    .ai-b { background: var(--bg); align-self: flex-start; border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-    .user-b { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-
-    .input-row { display: flex; padding: 20px; gap: 12px; border-top: 1px solid var(--border); }
-    input[type="text"] { flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; }
-    .btn-send { padding: 0 24px; background: var(--accent); color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: bold; }
-
-    .splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-    .ap-animation { font-size: 90px; font-weight: bold; color: var(--accent); animation: zoomOut 2.2s forwards cubic-bezier(0.4, 0, 0.2, 1); }
-    @keyframes zoomOut { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(60); opacity: 0; visibility: hidden; } }
-
-    .user-profile { display: flex; align-items: center; gap: 15px; position: relative; cursor: pointer; }
-    .user-photo { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
-    .dropdown {
-      position: absolute; top: 55px; right: 0; background: var(--card); 
-      border: 1px solid var(--border); border-radius: 15px; width: 240px;
-      display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1000;
-    }
-    .dropdown.active { display: flex; }
-    .dropdown button { padding: 14px; border: none; background: transparent; text-align: left; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 10px; }
-
-    .hero-buttons {
-      display: flex; gap: 15px; justify-content: center; margin-top: 50px;
-    }
+    .secondary-btn { background: transparent; border: 1px solid var(--border); color: var(--text); font-size: 13px; }
+    
+    #dashboard { max-width: 1000px; }
+    .chat-box { background: var(--card); height: 60vh; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; }
+    #chat-log { flex: 1; padding: 20px; overflow-y: auto; }
+    .bubble { padding: 10px 15px; border-radius: 15px; margin: 5px 0; max-width: 80%; }
+    .user-b { background: var(--accent); align-self: flex-end; margin-left: auto; }
+    .ai-b { background: var(--bg); border: 1px solid var(--border); }
   </style>
 </head>
 <body>
 
-  <div class="splash-screen" id="splash"><div class="ap-animation">AP</div></div>
-
-  <header>
-    <div class="logo" onclick="switchView('home')">AP</div>
-    <div id="user-ui" style="display: none;" class="user-profile" onclick="toggleDropdown()">
-      <img src="" id="pfp" class="user-photo">
-      <div class="dropdown" id="user-menu">
-        <button onclick="switchView('dashboard')">🚀 Painel de IA</button>
-        <button onclick="switchView('config')">⚙️ Configurações</button>
-        <button onclick="logout()" style="color: #ff4d4d;">🚪 Sair</button>
-      </div>
-    </div>
-  </header>
-
   <div id="home" class="view active">
-    <div style="text-align: center; margin-top: 10vh;">
-      <h1 style="font-size: 48px; margin-bottom: 20px;">Bem Vindo</h1>
-      <p style="opacity: 0.7; font-size: 20px; max-width: 700px; margin: auto; line-height: 1.6;">
-        Educação Digital, ENEM, Programação e Estudo sobre IA 
-      </p>
-      
-      <div id="logged-out-hero" class="hero-buttons">
-        <button class="btn-auth" onclick="switchView('login')">Fazer Login</button>
-        <button class="btn-auth btn-primary" onclick="switchView('login')">Criar Conta</button>
-      </div>
+    <div style="text-align: center; margin-top: 20vh;">
+      <h1>Bem-vindo ao AP</h1>
+      <button onclick="switchView('login-email')">Entrar com E-mail</button>
+      <button class="secondary-btn" onclick="switchView('registro')">Criar Nova Conta</button>
     </div>
   </div>
 
-  <div id="login" class="view">
-    <div class="login-card">
-      <h2>Bem-vindo ao AP</h2>
-      <p style="opacity: 0.6; font-size: 14px; margin-top: 8px;">Acesse sua plataforma de estudos</p>
+  <div id="login-email" class="view">
+    <div class="card">
+      <h2>Login</h2>
+      <input type="email" id="login-user" placeholder="Seu e-mail">
+      <input type="password" id="login-pass" placeholder="Sua senha">
+      <button id="btn-entrar">Entrar</button>
+      <button class="secondary-btn" onclick="switchView('home')">Voltar</button>
+    </div>
+  </div>
+
+  <div id="registro" class="view">
+    <div class="card">
+      <h2>Cadastro</h2>
+      <input type="text" id="reg-nome" placeholder="Nome Completo">
+      <input type="email" id="reg-email" placeholder="E-mail">
       
-      <div class="terms-container" id="terms-box">
-        <input type="checkbox" id="check-terms">
-        <label for="check-terms">Aceito os termos de Educação Digital</label>
+      <div style="display: flex; gap: 10px;">
+        <input type="number" id="reg-idade" placeholder="Idade">
+        <select id="reg-sexo">
+            <option value="">Sexo</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Feminino">Feminino</option>
+            <option value="Outro">Outro</option>
+        </select>
       </div>
 
-      <button onclick="validaELoga()" style="width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--border); cursor: pointer; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600;">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
-            <path fill="#34A853" d="M12 24c3.24 0 5.97-1.09 7.96-2.91l-3.86-3c-1.08.75-2.45 1.18-4.1 1.18-3.17 0-5.85-2.13-6.81-4.98H1.32v3.09C3.28 21.31 7.37 24 12 24z"/>
-            <path fill="#FBBC05" d="M5.19 14.29c-.25-.75-.39-1.55-.39-2.39s.14-1.64.39-2.39V6.41H1.32c-.84 1.7-1.32 3.59-1.32 5.59s.48 3.89 1.32 5.59l3.87-3.11z"/>
-            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.22 0 12 0 7.37 0 3.28 2.69 1.32 6.41L5.19 9.5c.96-2.85 3.64-4.75 6.81-4.75z"/>
-        </svg>
-        Entrar com Google
-      </button>
-      <button onclick="switchView('home')" style="margin-top: 20px; background: transparent; border: none; color: var(--accent); cursor: pointer; font-size: 14px;">Voltar</button>
+      <input type="password" id="reg-pass" placeholder="Criar Senha">
+      <input type="password" id="reg-pass-conf" placeholder="Confirmar Senha">
+      
+      <button id="btn-registrar">Criar Conta e Verificar E-mail</button>
+      <button class="secondary-btn" onclick="switchView('home')">Já tenho conta</button>
     </div>
   </div>
 
   <div id="dashboard" class="view">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>Tutor de Programação & ENEM</h2>
-        <span style="font-size: 12px; padding: 5px 12px; background: rgba(124,108,255,0.1); color: var(--accent); border-radius: 20px; font-weight: bold;">Gemini 1.5 Flash</span>
-    </div>
     <div class="chat-box">
-      <div id="chat-log">
-        <div class="bubble ai-b">Olá! Como estão seus estudos de Programação e ENEM hoje? Posso te ajudar com IA ou algum conteúdo específico?</div>
-      </div>
-      <div class="input-row">
-        <input type="text" id="user-prompt" placeholder="Tire sua dúvida aqui..." onkeypress="if(event.key==='Enter') perguntarIA()">
-        <button class="btn-send" onclick="perguntarIA()">Enviar</button>
+      <div id="chat-log"></div>
+      <div style="padding: 15px; display: flex; gap: 10px; border-top: 1px solid var(--border);">
+        <input type="text" id="user-prompt" placeholder="Sua dúvida...">
+        <button onclick="perguntarIA()" style="width: auto;">Enviar</button>
       </div>
     </div>
+    <button onclick="sair()" class="secondary-btn" style="margin-top: 20px;">Sair</button>
   </div>
 
   <script type="module">
+    import { CONFIG } from './env.js';
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getDatabase, ref, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+    import { 
+        getAuth, 
+        createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword, 
+        sendEmailVerification, 
+        onAuthStateChanged,
+        signOut 
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyA34ErbiFCDDSiLT4YuWZxa6nDESwvgAgk",
+      apiKey: CONFIG.FIREBASE_KEY,
       authDomain: "ap-x-c062e.firebaseapp.com",
       databaseURL: "https://ap-x-c062e-default-rtdb.firebaseio.com",
       projectId: "ap-x-c062e",
@@ -192,71 +120,77 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
-    const prov = new GoogleAuthProvider();
-    const GEMINI_KEY = "AIzaSyCayMIED-wA52Sh2UKIKDo8acJHX1GjBfQ";
 
-    window.validaELoga = async () => {
-        const check = document.getElementById('check-terms');
-        const box = document.getElementById('terms-box');
-        if (!check.checked) {
-            box.classList.add('error');
-            setTimeout(() => box.classList.remove('error'), 500);
-            return;
-        }
+    document.getElementById('btn-registrar').onclick = async () => {
+        const nome = document.getElementById('reg-nome').value;
+        const email = document.getElementById('reg-email').value;
+        const pass = document.getElementById('reg-pass').value;
+        const conf = document.getElementById('reg-pass-conf').value;
+        const idade = document.getElementById('reg-idade').value;
+        const sexo = document.getElementById('reg-sexo').value;
+
+        if(pass !== conf) return alert("As senhas não coincidem!");
+        if(!idade || !sexo) return alert("Preencha idade e sexo!");
+
         try {
-            const res = await signInWithPopup(auth, prov);
-            await set(ref(db, 'alunos/' + res.user.uid), { 
-                nome: res.user.displayName, email: res.user.email, foto: res.user.photoURL, lastAccess: serverTimestamp() 
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            const user = userCredential.user;
+
+            await sendEmailVerification(user);
+            alert("E-mail de verificação enviado! Verifique sua caixa de entrada.");
+
+            await set(ref(db, 'usuarios/' + user.uid), {
+                nome, idade, sexo, email, verificado: false
             });
-            switchView('dashboard');
-        } catch (e) { console.error(e); }
+
+            switchView('home');
+        } catch (e) { alert("Erro: " + e.message); }
     };
 
-    window.logout = () => signOut(auth).then(() => location.reload());
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById('logged-out-hero').style.display = 'none';
-        document.getElementById('user-ui').style.display = 'flex';
-        document.getElementById('pfp').src = user.photoURL;
-        if(document.getElementById('login').classList.contains('active')) switchView('dashboard');
-      }
-    });
+    document.getElementById('btn-entrar').onclick = async () => {
+        const email = document.getElementById('login-user').value;
+        const pass = document.getElementById('login-pass').value;
+        try {
+            const userCred = await signInWithEmailAndPassword(auth, email, pass);
+            if(!userCred.user.emailVerified) {
+                alert("Por favor, verifique seu e-mail antes de entrar!");
+                return;
+            }
+            switchView('dashboard');
+        } catch (e) { alert("Dados incorretos!"); }
+    };
 
     window.perguntarIA = async () => {
-      const p = document.getElementById('user-prompt');
-      const log = document.getElementById('chat-log');
-      const msg = p.value;
-      if(!msg) return;
-      log.innerHTML += `<div class="bubble user-b">${msg}</div>`;
-      p.value = "";
-      log.scrollTop = log.scrollHeight;
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: msg }] }] })
-        });
-        const data = await res.json();
-        const responseText = data.candidates[0].content.parts[0].text;
-        log.innerHTML += `<div class="bubble ai-b">${responseText.replace(/\n/g, '<br>')}</div>`;
-      } catch (e) {
-        log.innerHTML += `<div class="bubble ai-b" style="color:red">Erro na conexão.</div>`;
-      }
-      log.scrollTop = log.scrollHeight;
-    };
-  </script>
+        const p = document.getElementById('user-prompt');
+        const log = document.getElementById('chat-log');
+        const msg = p.value;
+        if(!msg) return;
 
-  <script>
-    function switchView(id) { 
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
-      document.getElementById(id).classList.add('active'); 
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-    function toggleDropdown() { document.getElementById('user-menu').classList.toggle('active'); }
-    window.addEventListener('load', () => {
-      setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2200);
+        log.innerHTML += `<div class="bubble user-b">${msg}</div>`;
+        p.value = "";
+
+        try {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CONFIG.GEMINI_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: msg }] }] })
+            });
+            const data = await res.json();
+            const responseText = data.candidates[0].content.parts[0].text;
+            log.innerHTML += `<div class="bubble ai-b">${responseText.replace(/\n/g, '<br>')}</div>`;
+        } catch (e) { log.innerHTML += `<div class="bubble ai-b" style="color:red">Erro na conexão.</div>`; }
+        log.scrollTop = log.scrollHeight;
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        if (user && user.emailVerified) switchView('dashboard');
     });
+
+    window.sair = () => signOut(auth).then(() => location.reload());
+    window.switchView = (id) => {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    };
   </script>
 </body>
 </html>
