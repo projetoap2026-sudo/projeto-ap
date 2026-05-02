@@ -13,130 +13,136 @@
       --text: #111111;
       --accent: #4f46e5;
       --border: rgba(0,0,0,0.08);
+      --font-scale: 1;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0f1115;
-        --card: #181b22;
-        --text: #f5f5f5;
-        --accent: #7c6cff;
-        --border: rgba(255,255,255,0.08);
-      }
+    body.dark-mode {
+      --bg: #0f1115;
+      --card: #181b22;
+      --text: #f5f5f5;
+      --accent: #7c6cff;
+      --border: rgba(255,255,255,0.08);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    body.modo-leitura {
+      --bg: #fffcf5; 
+      --text: #1a1a1a;
+      --card: #ffffff;
+      --accent: #000000;
+    }
+
+    body.bold-text * { font-weight: bold !important; }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; transition: 0.3s ease; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; font-size: calc(16px * var(--font-scale)); }
 
     header {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 40px; border-bottom: 1px solid var(--border);
+      padding: 15px 40px; border-bottom: 1px solid var(--border);
       position: sticky; top: 0; background: var(--bg); backdrop-filter: blur(12px); z-index: 100;
     }
-    .logo { text-shadow: 0 0 12px var(--accent); font-size: 28px; font-weight: bold; color: var(--accent); cursor: pointer; }
-    nav button {
-      background: transparent; border: none; color: var(--text); font-size: 16px;
-      font-weight: 500; cursor: pointer; margin-left: 20px; transition: 0.2s ease;
-    }
-    nav button:hover { color: var(--accent); }
-    .theme-toggle { border: 1px solid var(--border); padding: 8px 12px; border-radius: 12px; }
 
-    .view { display: none; animation: fadeIn 0.5s ease; padding: 40px 20px; max-width: 1200px; margin: auto; min-height: 80vh; }
+    .user-profile { display: flex; align-items: center; gap: 15px; position: relative; cursor: pointer; }
+    .user-photo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+    
+    .dropdown {
+      position: absolute; top: 50px; right: 0; background: var(--card); 
+      border: 1px solid var(--border); border-radius: 12px; width: 220px;
+      display: none; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .dropdown.active { display: flex; }
+    .dropdown button { padding: 12px; border: none; background: transparent; text-align: left; color: var(--text); cursor: pointer; font-size: 14px; }
+    .dropdown button:hover { background: var(--accent); color: white; }
+
+    .view { display: none; padding: 40px 20px; max-width: 1200px; margin: auto; }
     .view.active { display: block; }
+
     
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Layout do Chat */
-    .chat-box {
-      max-width: 800px; margin: 20px auto; background: var(--card); border-radius: 20px;
-      border: 1px solid var(--border); display: flex; flex-direction: column; height: 450px;
-    }
-    #chat-log { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-    .bubble { padding: 12px 16px; border-radius: 15px; max-width: 85%; font-size: 15px; line-height: 1.4; }
-    .user-b { align-self: flex-end; background: var(--accent); color: white; }
-    .ai-b { align-self: flex-start; background: var(--bg); border: 1px solid var(--border); white-space: pre-wrap; }
+    .config-group { margin-bottom: 20px; padding: 15px; background: var(--card); border-radius: 12px; }
+    .config-group label { display: block; margin-bottom: 10px; }
     
-    .input-row { display: flex; padding: 15px; border-top: 1px solid var(--border); gap: 10px; }
-    #input-ia { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-    .send-btn { padding: 0 20px; background: var(--accent); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+    .chat-box { max-width: 800px; margin: 20px auto; background: var(--card); border-radius: 20px; border: 1px solid var(--border); height: 400px; display: flex; flex-direction: column; }
+    #chat-log { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; }
+    .ai-b { background: var(--bg); align-self: flex-start; border: 1px solid var(--border); }
+    .user-b { background: var(--accent); color: white; align-self: flex-end; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 25px; transition: 0.2s; cursor: pointer; }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 0 20px rgba(124,108,255,0.18); }
-
-    .login-box { max-width: 400px; margin: 40px auto; background: var(--card); padding: 35px; border-radius: 24px; border: 1px solid var(--border); text-align: center; }
-    .terms-box { display: flex; align-items: center; gap: 10px; font-size: 13px; opacity: 0.8; margin: 20px 0; cursor: pointer; }
-    .google-btn { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); cursor: pointer; font-weight: bold; }
+    .input-row { display: flex; padding: 15px; gap: 10px; border-top: 1px solid var(--border); }
+    input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
 
     .splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-    .ap-animation { font-size: 90px; font-weight: bold; color: var(--accent); text-shadow: 0 0 30px var(--accent); animation: zoomOutFade 2.5s forwards; }
-
-    @keyframes zoomOutFade {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(40); opacity: 0; visibility: hidden; }
-    }
-
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr; }
-      .ap-animation { font-size: 60px; }
-    }
+    .ap-animation { font-size: 80px; font-weight: bold; color: var(--accent); animation: zoomOut 2s forwards; }
+    @keyframes zoomOut { 100% { transform: scale(50); opacity: 0; visibility: hidden; } }
   </style>
 </head>
-<body>
+<body class="dark-mode">
 
-  <div class="splash-screen" id="splash">
-    <div class="ap-animation">AP</div>
-  </div>
+  <div class="splash-screen" id="splash"><div class="ap-animation">AP</div></div>
 
   <header>
     <div class="logo" onclick="switchView('home')">AP</div>
-    <nav>
-      <button onclick="switchView('dashboard')">Painel de IA</button>
-      <button onclick="switchView('login')">Login</button>
-      <button class="theme-toggle" onclick="toggleTheme()">🌙 Tema</button>
-    </nav>
+    
+    <div id="auth-area">
+      <button id="login-nav-btn" onclick="switchView('login')" style="background: var(--accent); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;">Login</button>
+      
+      <div class="user-profile" id="user-ui" style="display: none;" onclick="toggleDropdown()">
+        <img src="" id="pfp" class="user-photo">
+        <div class="dropdown" id="user-menu">
+          <button onclick="switchView('config')">⚙️ Configurações</button>
+          <button onclick="loginGoogle()">➕ Adicionar Outra Conta</button>
+          <button onclick="switchView('login')">🔄 Trocar de Perfil</button>
+          <button onclick="logout()">🚪 Sair</button>
+        </div>
+      </div>
+    </div>
   </header>
 
+  
   <div id="home" class="view">
-    <div style="text-align:center; padding-top:100px;">
-      <h1>Aprendizado com IA</h1>
-      <button class="send-btn" style="height:50px; margin-top:20px;" onclick="switchView('login')">Começar Agora</button>
-    </div>
+    <h1 style="text-align: center; margin-top: 50px;">Bem-vindo ao Futuro do Aprendizado</h1>
+    <p style="text-align: center; opacity: 0.7;">Use IA para dominar Programação, ENEM e Cybersecurity.</p>
   </div>
 
+  
   <div id="login" class="view active">
-    <div class="login-box">
-      <h2>Entrar no AP</h2>
-      <button class="google-btn" onclick="loginGoogle()">🌐 Entrar com Google</button>
-      <label class="terms-box">
-        <input type="checkbox" id="t-check"> Aceito os Termos de Uso.
-      </label>
+    <div style="max-width: 350px; margin: auto; text-align: center;">
+      <h2>Acesse sua Conta</h2><br>
+      <button onclick="loginGoogle()" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer;">🌐 Entrar com Google</button>
     </div>
   </div>
 
+  
   <div id="dashboard" class="view">
-    <h2 style="text-align:center;">Tutor Inteligente AP</h2>
-    
     <div class="chat-box">
-      <div id="chat-log">
-        <div class="bubble ai-b">Olá! Sou sua IA de estudos. Como posso te ajudar hoje?</div>
-      </div>
+      <div id="chat-log"></div>
       <div class="input-row">
-        <input type="text" id="input-ia" placeholder="Pergunte qualquer coisa...">
-        <button class="send-btn" onclick="enviarChat()">Enviar</button>
+        <input type="text" id="prompt" placeholder="Pergunte ao AP...">
+        <button onclick="perguntarIA()" style="padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 8px;">Enviar</button>
       </div>
     </div>
+  </div>
 
-    <div class="grid">
-      <div class="card" onclick="document.getElementById('input-ia').value='Me ajude com Programação'"><h3>💻 Programação</h3></div>
-      <div class="card" onclick="document.getElementById('input-ia').value='Dicas para o ENEM'"><h3>📝 ENEM</h3></div>
-      <div class="card" onclick="document.getElementById('input-ia').value='O que é Cybersecurity?'"><h3>🛡️ Segurança</h3></div>
+  
+  <div id="config" class="view">
+    <h2>Configurações do Sistema</h2><br>
+    
+    <div class="config-group">
+      <label>Visual e Tema</label>
+      <button onclick="setTheme('dark')">🌙 Escuro</button>
+      <button onclick="setTheme('light')">☀️ Claro</button>
+      <button onclick="setTheme('papel')">📄 Modo Leitura (Papel)</button>
+    </div>
+
+    <div class="config-group">
+      <label>Texto e Acessibilidade</label>
+      <button onclick="document.body.classList.toggle('bold-text')"><b>B</b> Negrito</button>
+      <input type="range" min="0.8" max="1.5" step="0.1" value="1" onchange="setFontScale(this.value)"> Escala da Fonte
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getDatabase, ref, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 
     const firebaseConfig = {
@@ -151,60 +157,55 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const database = getDatabase(app);
-    const provider = new GoogleAuthProvider();
-
-    // Sua Chave do Gemini do print
+    const db = getDatabase(app);
+    const prov = new GoogleAuthProvider();
     const GEMINI_KEY = "AIzaSyCayMIED-wA52Sh2UKIKDo8acJHX1GjBfQ";
 
-    window.loginGoogle = async function() {
-      if (!document.getElementById('t-check').checked) return alert("Aceite os termos.");
+    window.loginGoogle = async () => {
       try {
-        const res = await signInWithPopup(auth, provider);
-        await set(ref(database, 'alunos/' + res.user.uid), {
-          nome: res.user.displayName,
-          email: res.user.email,
-          acesso: serverTimestamp()
-        });
+        const res = await signInWithPopup(auth, prov);
+        await set(ref(db, 'alunos/' + res.user.uid), { nome: res.user.displayName, email: res.user.email, pfp: res.user.photoURL, last: serverTimestamp() });
         switchView('dashboard');
-      } catch (err) { console.error(err); }
+      } catch (e) { console.error(e); }
     };
 
-    window.enviarChat = async function() {
-      const box = document.getElementById('input-ia');
-      const log = document.getElementById('chat-log');
-      const msg = box.value;
-      if (!msg) return;
+    window.logout = () => signOut(auth).then(() => location.reload());
 
-      log.innerHTML += `<div class="bubble user-b">${msg}</div>`;
-      box.value = "";
-      log.scrollTop = log.scrollHeight;
-
-      try {
-        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: `Você é o tutor do sistema AP. Responda de forma didática: ${msg}` }] }] })
-        });
-        const data = await resp.json();
-        const texto = data.candidates[0].content.parts[0].text;
-        log.innerHTML += `<div class="bubble ai-b">${texto}</div>`;
-      } catch (e) {
-        log.innerHTML += `<div class="bubble ai-b">Erro ao conectar. Tente novamente.</div>`;
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login-nav-btn').style.display = 'none';
+        document.getElementById('user-ui').style.display = 'flex';
+        document.getElementById('pfp').src = user.photoURL;
       }
-      log.scrollTop = log.scrollHeight;
+    });
+
+    window.perguntarIA = async () => {
+      const p = document.getElementById('prompt');
+      const l = document.getElementById('chat-log');
+      if(!p.value) return;
+      l.innerHTML += `<div class="bubble user-b">${p.value}</div>`;
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+        method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: p.value }] }] })
+      });
+      const data = await res.json();
+      l.innerHTML += `<div class="bubble ai-b">${data.candidates[0].content.parts[0].text}</div>`;
+      p.value = "";
+      l.scrollTop = l.scrollHeight;
     };
   </script>
 
   <script>
-    window.addEventListener('load', () => { setTimeout(() => { document.getElementById('splash').style.display='none'; switchView('login'); }, 2500); });
     function switchView(id) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-    function toggleTheme() { 
-      const b = document.body; b.dataset.theme = b.dataset.theme === 'dark' ? 'light' : 'dark';
-      document.documentElement.style.setProperty('--bg', b.dataset.theme === 'dark' ? '#0f1115' : '#ffffff');
-      document.documentElement.style.setProperty('--text', b.dataset.theme === 'dark' ? '#f5f5f5' : '#111111');
-      document.documentElement.style.setProperty('--card', b.dataset.theme === 'dark' ? '#181b22' : '#f4f4f4');
+    function toggleDropdown() { document.getElementById('user-menu').classList.toggle('active'); }
+    function setFontScale(v) { document.documentElement.style.setProperty('--font-scale', v); }
+    
+    function setTheme(m) {
+      document.body.classList.remove('dark-mode', 'modo-leitura');
+      if(m === 'dark') document.body.classList.add('dark-mode');
+      if(m === 'papel') document.body.classList.add('modo-leitura');
     }
+
+    window.addEventListener('load', () => setTimeout(() => document.getElementById('splash').style.display = 'none', 2000));
   </script>
 </body>
 </html>
