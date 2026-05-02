@@ -1,211 +1,133 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
-  <link rel="manifest" href="manifest.json">
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AP — Aprendizado com IA</title>
+
+  <title>AP — MODO RESENHA</title>
+
   <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #ffffff;
-      --card: #f4f4f4;
-      --text: #111111;
-      --accent: #4f46e5;
-      --border: rgba(0,0,0,0.08);
-      --font-scale: 1;
+
+    body {
+
+      background: #0f1115;
+
+      margin: 0;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      height: 100vh;
+
+      overflow: hidden;
+
+      flex-direction: column;
+
+      color: #7c6cff;
+
+      font-family: Arial, sans-serif;
+
     }
 
-    body.dark-mode {
-      --bg: #0f1115;
-      --card: #181b22;
-      --text: #f5f5f5;
-      --accent: #7c6cff;
-      --border: rgba(255,255,255,0.08);
+
+
+    .meme-container {
+
+      perspective: 1000px;
+
     }
 
-    body.modo-leitura {
-      --bg: #fffcf5; 
-      --text: #1a1a1a;
-      --card: #ffffff;
-      --accent: #000000;
+
+
+    .meme-img {
+
+      width: 300px;
+
+      border-radius: 20px;
+
+      box-shadow: 0 0 50px rgba(124, 108, 255, 0.5);
+
+      animation: zoeira-extrema 3s infinite ease-in-out;
+
     }
 
-    body.bold-text * { font-weight: bold !important; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; transition: 0.3s ease; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; font-size: calc(16px * var(--font-scale)); }
 
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 15px 40px; border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; background: var(--bg); backdrop-filter: blur(12px); z-index: 100;
-    }
+    @keyframes zoeira-extrema {
 
-    .user-profile { display: flex; align-items: center; gap: 15px; position: relative; cursor: pointer; }
-    .user-photo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
-    
-    .dropdown {
-      position: absolute; top: 50px; right: 0; background: var(--card); 
-      border: 1px solid var(--border); border-radius: 12px; width: 220px;
-      display: none; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .dropdown.active { display: flex; }
-    .dropdown button { padding: 12px; border: none; background: transparent; text-align: left; color: var(--text); cursor: pointer; font-size: 14px; }
-    .dropdown button:hover { background: var(--accent); color: white; }
+      0% { 
 
-    .view { display: none; padding: 40px 20px; max-width: 1200px; margin: auto; }
-    .view.active { display: block; }
+        transform: rotate(0deg) scale(1) translateZ(0); 
 
-    
-    .config-group { margin-bottom: 20px; padding: 15px; background: var(--card); border-radius: 12px; }
-    .config-group label { display: block; margin-bottom: 10px; }
-    
-    .chat-box { max-width: 800px; margin: 20px auto; background: var(--card); border-radius: 20px; border: 1px solid var(--border); height: 400px; display: flex; flex-direction: column; }
-    #chat-log { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-    .bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; }
-    .ai-b { background: var(--bg); align-self: flex-start; border: 1px solid var(--border); }
-    .user-b { background: var(--accent); color: white; align-self: flex-end; }
-
-    .input-row { display: flex; padding: 15px; gap: 10px; border-top: 1px solid var(--border); }
-    input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-
-    .splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-    .ap-animation { font-size: 80px; font-weight: bold; color: var(--accent); animation: zoomOut 2s forwards; }
-    @keyframes zoomOut { 100% { transform: scale(50); opacity: 0; visibility: hidden; } }
-  </style>
-</head>
-<body class="dark-mode">
-
-  <div class="splash-screen" id="splash"><div class="ap-animation">AP</div></div>
-
-  <header>
-    <div class="logo" onclick="switchView('home')">AP</div>
-    
-    <div id="auth-area">
-      <button id="login-nav-btn" onclick="switchView('login')" style="background: var(--accent); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;">Login</button>
-      
-      <div class="user-profile" id="user-ui" style="display: none;" onclick="toggleDropdown()">
-        <img src="" id="pfp" class="user-photo">
-        <div class="dropdown" id="user-menu">
-          <button onclick="switchView('config')">⚙️ Configurações</button>
-          <button onclick="loginGoogle()">➕ Adicionar Outra Conta</button>
-          <button onclick="switchView('login')">🔄 Trocar de Perfil</button>
-          <button onclick="logout()">🚪 Sair</button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  
-  <div id="home" class="view">
-    <h1 style="text-align: center; margin-top: 50px;">Bem-vindo ao Futuro do Aprendizado</h1>
-    <p style="text-align: center; opacity: 0.7;">Use IA para dominar Programação, ENEM e Cybersecurity.</p>
-  </div>
-
-  
-  <div id="login" class="view active">
-    <div style="max-width: 350px; margin: auto; text-align: center;">
-      <h2>Acesse sua Conta</h2><br>
-      <button onclick="loginGoogle()" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer;">🌐 Entrar com Google</button>
-    </div>
-  </div>
-
-  
-  <div id="dashboard" class="view">
-    <div class="chat-box">
-      <div id="chat-log"></div>
-      <div class="input-row">
-        <input type="text" id="prompt" placeholder="Pergunte ao AP...">
-        <button onclick="perguntarIA()" style="padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 8px;">Enviar</button>
-      </div>
-    </div>
-  </div>
-
-  
-  <div id="config" class="view">
-    <h2>Configurações do Sistema</h2><br>
-    
-    <div class="config-group">
-      <label>Visual e Tema</label>
-      <button onclick="setTheme('dark')">🌙 Escuro</button>
-      <button onclick="setTheme('light')">☀️ Claro</button>
-      <button onclick="setTheme('papel')">📄 Modo Leitura (Papel)</button>
-    </div>
-
-    <div class="config-group">
-      <label>Texto e Acessibilidade</label>
-      <button onclick="document.body.classList.toggle('bold-text')"><b>B</b> Negrito</button>
-      <input type="range" min="0.8" max="1.5" step="0.1" value="1" onchange="setFontScale(this.value)"> Escala da Fonte
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getDatabase, ref, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyA34ErbiFCDDSiLT4YuWZxa6nDESwvgAgk",
-      authDomain: "ap-x-c062e.firebaseapp.com",
-      databaseURL: "https://ap-x-c062e-default-rtdb.firebaseio.com",
-      projectId: "ap-x-c062e",
-      storageBucket: "ap-x-c062e.firebasestorage.app",
-      messagingSenderId: "1069658318640",
-      appId: "1:1069658318640:web:0c0798a171d838a6c34af5"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-    const prov = new GoogleAuthProvider();
-    const GEMINI_KEY = "AIzaSyCayMIED-wA52Sh2UKIKDo8acJHX1GjBfQ";
-
-    window.loginGoogle = async () => {
-      try {
-        const res = await signInWithPopup(auth, prov);
-        await set(ref(db, 'alunos/' + res.user.uid), { nome: res.user.displayName, email: res.user.email, pfp: res.user.photoURL, last: serverTimestamp() });
-        switchView('dashboard');
-      } catch (e) { console.error(e); }
-    };
-
-    window.logout = () => signOut(auth).then(() => location.reload());
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById('login-nav-btn').style.display = 'none';
-        document.getElementById('user-ui').style.display = 'flex';
-        document.getElementById('pfp').src = user.photoURL;
       }
-    });
 
-    window.perguntarIA = async () => {
-      const p = document.getElementById('prompt');
-      const l = document.getElementById('chat-log');
-      if(!p.value) return;
-      l.innerHTML += `<div class="bubble user-b">${p.value}</div>`;
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-        method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: p.value }] }] })
-      });
-      const data = await res.json();
-      l.innerHTML += `<div class="bubble ai-b">${data.candidates[0].content.parts[0].text}</div>`;
-      p.value = "";
-      l.scrollTop = l.scrollHeight;
-    };
-  </script>
+      25% { 
 
-  <script>
-    function switchView(id) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-    function toggleDropdown() { document.getElementById('user-menu').classList.toggle('active'); }
-    function setFontScale(v) { document.documentElement.style.setProperty('--font-scale', v); }
-    
-    function setTheme(m) {
-      document.body.classList.remove('dark-mode', 'modo-leitura');
-      if(m === 'dark') document.body.classList.add('dark-mode');
-      if(m === 'papel') document.body.classList.add('modo-leitura');
+        transform: rotate(90deg) scale(1.8) translateZ(100px); 
+
+      }
+
+      50% { 
+
+        transform: rotate(180deg) scale(0.3) translateZ(-200px); 
+
+      }
+
+      75% { 
+
+        transform: rotate(270deg) scale(2) translateZ(150px); 
+
+      }
+
+      100% { 
+
+        transform: rotate(360deg) scale(1) translateZ(0); 
+
+      }
+
     }
 
-    window.addEventListener('load', () => setTimeout(() => document.getElementById('splash').style.display = 'none', 2000));
-  </script>
+
+
+    h1 {
+
+      margin-top: 50px;
+
+      text-shadow: 0 0 20px #7c6cff;
+
+      letter-spacing: 5px;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+
+
+  <div class="meme-container">
+
+    <img src="https://pt.quizur.com/_image?href=https%3A%2F%2Fstatic.quizur.com%2Fi%2Fb%2F592f3eaf4b9f21.66344098libdmax.png&w=600&h=600&f=webp" class="meme-img">
+
+  </div>
+
+
+
+  <h1>TOLLLLLLLLLLLLL</h1>
+
+  <h1>NIGGGGGGGGGA</h1>
+
+
+
 </body>
+
 </html>
