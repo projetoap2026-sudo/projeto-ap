@@ -70,7 +70,7 @@
       height: 60vh; min-height: 400px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     #chat-log { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-    .bubble { padding: 12px 18px; border-radius: 18px; max-width: 85%; font-size: 15px; line-height: 1.5; }
+    .bubble { padding: 12px 18px; border-radius: 18px; max-width: 85%; font-size: 15px; line-height: 1.5; word-wrap: break-word; }
     .ai-b { background: var(--bg); align-self: flex-start; border: 1px solid var(--border); border-bottom-left-radius: 4px; }
     .user-b { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
@@ -112,7 +112,6 @@
     </div>
   </header>
 
- 
   <div id="home" class="view">
     <div style="text-align: center; margin-top: 80px;">
       <h1 style="font-size: 42px; margin-bottom: 20px;">Evolua seu aprendizado</h1>
@@ -121,14 +120,19 @@
     </div>
   </div>
 
-  
   <div id="login" class="view active">
     <div style="max-width: 400px; margin: 40px auto; text-align: center; background: var(--card); padding: 40px; border-radius: 28px; border: 1px solid var(--border);">
       <h2 style="margin-bottom: 10px;">Bem-vindo ao AP</h2>
       <p style="opacity: 0.6; font-size: 14px; margin-bottom: 30px;">Crie sua conta ou faça login para continuar.</p>
       
       <button onclick="loginGoogle()" style="width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--border); cursor: pointer; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600;">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Entrar com Google
+        <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.97-1.09 7.96-2.91l-3.86-3c-1.08.75-2.45 1.18-4.1 1.18-3.17 0-5.85-2.13-6.81-4.98H1.32v3.09C3.28 21.31 7.37 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.19 14.29c-.25-.75-.39-1.55-.39-2.39s.14-1.64.39-2.39V6.41H1.32c-.84 1.7-1.32 3.59-1.32 5.59s.48 3.89 1.32 5.59l3.87-3.11z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.22 0 12 0 7.37 0 3.28 2.69 1.32 6.41L5.19 9.5c.96-2.85 3.64-4.75 6.81-4.75z"/>
+        </svg>
+        Entrar com Google
       </button>
 
       <div style="margin-top: 25px; font-size: 12px; opacity: 0.5;">
@@ -137,10 +141,9 @@
     </div>
   </div>
 
-  
   <div id="dashboard" class="view">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="font-size: 24px;">Test</h2>
+        <h2 style="font-size: 24px;">Tutor Digital</h2>
         <span style="font-size: 12px; padding: 5px 12px; background: rgba(124,108,255,0.1); color: var(--accent); border-radius: 20px; font-weight: bold;">Gemini 1.5 Flash</span>
     </div>
     
@@ -149,13 +152,12 @@
         <div class="bubble ai-b">Olá! Sou seu tutor assistente. No que posso te ajudar hoje?</div>
       </div>
       <div class="input-row">
-        <input type="text" id="user-prompt" placeholder="Digite sua dúvida ou peça um roteiro de estudo...">
+        <input type="text" id="user-prompt" placeholder="Digite sua dúvida ou peça um roteiro de estudo..." onkeypress="if(event.key==='Enter') perguntarIA()">
         <button class="btn-send" onclick="perguntarIA()">Enviar</button>
       </div>
     </div>
   </div>
 
-  
   <div id="config" class="view">
     <h2>Configurações</h2>
     <div class="config-card">
@@ -196,7 +198,6 @@
     const db = getDatabase(app);
     const prov = new GoogleAuthProvider();
     
-    
     const GEMINI_KEY = "AIzaSyCayMIED-wA52Sh2UKIKDo8acJHX1GjBfQ";
 
     window.loginGoogle = async () => {
@@ -236,14 +237,14 @@
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: `Você é um tutor educacional moderno para estudantes de João Pessoa e do Brasil. Ajude de forma clara: ${msg}` }] }] })
+          body: JSON.stringify({ contents: [{ parts: [{ text: `Você é um tutor educacional moderno para estudantes de João Pessoa e do Brasil. Ajude de forma clara e direta: ${msg}` }] }] })
         });
         
         const data = await res.json();
         const responseText = data.candidates[0].content.parts[0].text;
-        log.innerHTML += `<div class="bubble ai-b">${responseText}</div>`;
+        log.innerHTML += `<div class="bubble ai-b">${responseText.replace(/\n/g, '<br>')}</div>`;
       } catch (e) {
-        log.innerHTML += `<div class="bubble ai-b" style="color: #ff4d4d;">⚠️ Conexão falhou. Verifique se sua chave API Studio está ativa.</div>`;
+        log.innerHTML += `<div class="bubble ai-b" style="color: #ff4d4d;">⚠️ Erro de Conexão: Verifique se o domínio está liberado no Google AI Studio.</div>`;
       }
       log.scrollTop = log.scrollHeight;
     };
@@ -266,10 +267,12 @@
     }
 
     window.addEventListener('load', () => {
-      setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2200);
+      setTimeout(() => { 
+        document.getElementById('splash').style.opacity = '0';
+        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 500);
+      }, 2200);
     });
 
-    
     window.addEventListener('click', (e) => {
         if (!document.getElementById('user-ui').contains(e.target)) {
             document.getElementById('user-menu').classList.remove('active');
