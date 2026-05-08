@@ -1,196 +1,472 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AP — Aprendizado com IA</title>
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #0f1115;
-      --card: #181b22;
-      --text: #f5f5f5;
-      --accent: #7c6cff;
-      --border: rgba(255,255,255,0.08);
-      --error: #ff4d4d;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.3s; }
-    body { background: var(--bg); color: var(--text); }
-    
-    .view { display: none; padding: 40px 20px; max-width: 500px; margin: auto; }
-    .view.active { display: block; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP — Plataforma de Inteligência</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-primary: #0a0b0d;
+            --bg-secondary: #16191f;
+            --bg-input: #050505;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --border-ui: #2d3748;
+            --error-ui: #ef4444;
+            --google-blue: #4285F4;
+            --facebook-blue: #1877F2;
+        }
 
-    .card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
-    input, select { 
-        width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; 
-        border: 1px solid var(--border); background: #000; color: #fff; 
-    }
-    button { 
-        width: 100%; padding: 14px; border-radius: 10px; border: none; 
-        background: var(--accent); color: #fff; font-weight: bold; cursor: pointer; margin-top: 10px;
-    }
-    .secondary-btn { background: transparent; border: 1px solid var(--border); color: var(--text); font-size: 13px; }
-    
-    #dashboard { max-width: 1000px; }
-    .chat-box { background: var(--card); height: 60vh; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; }
-    #chat-log { flex: 1; padding: 20px; overflow-y: auto; }
-    .bubble { padding: 10px 15px; border-radius: 15px; margin: 5px 0; max-width: 80%; }
-    .user-b { background: var(--accent); align-self: flex-end; margin-left: auto; }
-    .ai-b { background: var(--bg); border: 1px solid var(--border); }
-  </style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: none;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container.active {
+            display: flex;
+        }
+
+        .auth-card {
+            background: var(--bg-secondary);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-ui);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border-ui);
+            background: var(--bg-input);
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-social:hover {
+            background: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-ui);
+        }
+
+        .divider:not(:empty)::before { margin-right: .5em; }
+        .divider:not(:empty)::after { margin-left: .5em; }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-ui);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        #dashboard {
+            flex-direction: column;
+            padding: 0;
+            height: 100vh;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            background: var(--bg-secondary);
+            border-radius: 32px;
+            border: 1px solid var(--border-ui);
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            background: rgba(22, 25, 31, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-ui);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chat-log {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 16px 20px;
+            border-radius: 20px;
+            line-height: 1.6;
+            font-size: 15px;
+            word-wrap: break-word;
+        }
+
+        .message-user {
+            background: var(--accent-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-ai {
+            background: var(--bg-input);
+            border: 1px solid var(--border-ui);
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 24px 30px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-ui);
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            border-radius: 16px;
+        }
+
+        .btn-send {
+            width: auto;
+            padding: 0 30px;
+            margin: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-ui);
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="home" class="view active">
-    <div style="text-align: center; margin-top: 20vh;">
-      <h1>Bem-vindo ao AP</h1>
-      <button onclick="switchView('login-email')">Entrar com E-mail</button>
-      <button class="secondary-btn" onclick="switchView('registro')">Criar Nova Conta</button>
+    <div id="view-auth" class="container active">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Acesse o AP</h1>
+                <p>Escolha como deseja continuar</p>
+            </div>
+
+            <div class="social-buttons">
+                <button class="btn-social" id="btn-google">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18" alt="Google">
+                    Continuar com Google
+                </button>
+                <button class="btn-social" id="btn-facebook" style="border-color: #1877F2; color: #1877F2;">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Continuar com Facebook
+                </button>
+            </div>
+
+            <div class="divider">ou e-mail</div>
+
+            <div id="form-login">
+                <div class="input-group">
+                    <input type="email" id="email-field" placeholder="E-mail">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="pass-field" placeholder="Senha">
+                </div>
+                <button class="btn-primary" id="btn-main-action">Entrar</button>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-link" onclick="toggleAuthMode()" id="toggle-text">Não tem conta? Registre-se</button>
+                </div>
+            </div>
+
+            <div id="form-extra-fields" style="display: none; margin-top: 20px;">
+                <div class="input-group" style="display: flex; gap: 10px;">
+                    <input type="number" id="age-field" placeholder="Idade">
+                    <select id="gender-field">
+                        <option value="">Gênero</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div id="login-email" class="view">
-    <div class="card">
-      <h2>Login</h2>
-      <input type="email" id="login-user" placeholder="Seu e-mail">
-      <input type="password" id="login-pass" placeholder="Sua senha">
-      <button id="btn-entrar">Entrar</button>
-      <button class="secondary-btn" onclick="switchView('home')">Voltar</button>
+    <div id="view-dashboard" class="container">
+        <div class="chat-container">
+            <header class="chat-header">
+                <div>
+                    <h2 id="user-display-name">Carregando...</h2>
+                    <span style="font-size: 12px; color: var(--text-muted);">Status: Online</span>
+                </div>
+                <button class="btn-link" onclick="handleLogout()" style="color: var(--error-ui);">Sair da Conta</button>
+            </header>
+
+            <div id="chat-log">
+                <div class="message message-ai">Olá! Eu sou sua IA assistente do projeto AP. Como posso te ajudar hoje?</div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="ai-input" placeholder="Digite sua mensagem aqui..." onkeypress="handleChatEnter(event)">
+                <button class="btn-primary btn-send" onclick="processAIChat()">Enviar</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div id="registro" class="view">
-    <div class="card">
-      <h2>Cadastro</h2>
-      <input type="text" id="reg-nome" placeholder="Nome Completo">
-      <input type="email" id="reg-email" placeholder="E-mail">
-      
-      <div style="display: flex; gap: 10px;">
-        <input type="number" id="reg-idade" placeholder="Idade">
-        <select id="reg-sexo">
-            <option value="">Sexo</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Feminino">Feminino</option>
-            <option value="Outro">Outro</option>
-        </select>
-      </div>
+    <script type="module">
+        import { CONFIG } from './env.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            GoogleAuthProvider, 
+            FacebookAuthProvider, 
+            signInWithPopup, 
+            onAuthStateChanged, 
+            signOut,
+            sendEmailVerification
+        } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 
-      <input type="password" id="reg-pass" placeholder="Criar Senha">
-      <input type="password" id="reg-pass-conf" placeholder="Confirmar Senha">
-      
-      <button id="btn-registrar">Criar Conta e Verificar E-mail</button>
-      <button class="secondary-btn" onclick="switchView('home')">Já tenho conta</button>
-    </div>
-  </div>
+        const firebaseConfig = {
+            apiKey: CONFIG.FIREBASE_KEY,
+            authDomain: "ap-x-c062e.firebaseapp.com",
+            databaseURL: "https://ap-x-c062e-default-rtdb.firebaseio.com",
+            projectId: "ap-x-c062e",
+            storageBucket: "ap-x-c062e.firebasestorage.app",
+            messagingSenderId: "1069658318640",
+            appId: "1:1069658318640:web:0c0798a171d838a6c34af5"
+        };
 
-  <div id="dashboard" class="view">
-    <div class="chat-box">
-      <div id="chat-log"></div>
-      <div style="padding: 15px; display: flex; gap: 10px; border-top: 1px solid var(--border);">
-        <input type="text" id="user-prompt" placeholder="Sua dúvida...">
-        <button onclick="perguntarIA()" style="width: auto;">Enviar</button>
-      </div>
-    </div>
-    <button onclick="sair()" class="secondary-btn" style="margin-top: 20px;">Sair</button>
-  </div>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        let isRegisterMode = false;
 
-  <script type="module">
-    import { CONFIG } from './env.js';
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { 
-        getAuth, 
-        createUserWithEmailAndPassword, 
-        signInWithEmailAndPassword, 
-        sendEmailVerification, 
-        onAuthStateChanged,
-        signOut 
-    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+        window.toggleAuthMode = () => {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('form-extra-fields').style.display = isRegisterMode ? 'block' : 'none';
+            document.getElementById('btn-main-action').innerText = isRegisterMode ? 'Criar Conta' : 'Entrar';
+            document.getElementById('toggle-text').innerText = isRegisterMode ? 'Já tem conta? Faça Login' : 'Não tem conta? Registre-se';
+        };
 
-    const firebaseConfig = {
-      apiKey: CONFIG.FIREBASE_KEY,
-      authDomain: "ap-x-c062e.firebaseapp.com",
-      databaseURL: "https://ap-x-c062e-default-rtdb.firebaseio.com",
-      projectId: "ap-x-c062e",
-      storageBucket: "ap-x-c062e.firebasestorage.app",
-      messagingSenderId: "1069658318640",
-      appId: "1:1069658318640:web:0c0798a171d838a6c34af5"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-
-    document.getElementById('btn-registrar').onclick = async () => {
-        const nome = document.getElementById('reg-nome').value;
-        const email = document.getElementById('reg-email').value;
-        const pass = document.getElementById('reg-pass').value;
-        const conf = document.getElementById('reg-pass-conf').value;
-        const idade = document.getElementById('reg-idade').value;
-        const sexo = document.getElementById('reg-sexo').value;
-
-        if(pass !== conf) return alert("As senhas não coincidem!");
-        if(!idade || !sexo) return alert("Preencha idade e sexo!");
-
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-            const user = userCredential.user;
-
-            await sendEmailVerification(user);
-            alert("E-mail de verificação enviado! Verifique sua caixa de entrada.");
-
-            await set(ref(db, 'usuarios/' + user.uid), {
-                nome, idade, sexo, email, verificado: false
+        const saveUserData = async (user, extra = {}) => {
+            await set(ref(db, `usuarios/${user.uid}`), {
+                uid: user.uid,
+                email: user.email,
+                nome: user.displayName || 'Usuário AP',
+                idade: extra.idade || null,
+                sexo: extra.sexo || null,
+                lastLogin: new Date().toISOString()
             });
+        };
 
-            switchView('home');
-        } catch (e) { alert("Erro: " + e.message); }
-    };
+        document.getElementById('btn-main-action').onclick = async () => {
+            const email = document.getElementById('email-field').value;
+            const pass = document.getElementById('pass-field').value;
 
-    document.getElementById('btn-entrar').onclick = async () => {
-        const email = document.getElementById('login-user').value;
-        const pass = document.getElementById('login-pass').value;
-        try {
-            const userCred = await signInWithEmailAndPassword(auth, email, pass);
-            if(!userCred.user.emailVerified) {
-                alert("Por favor, verifique seu e-mail antes de entrar!");
-                return;
+            try {
+                if (isRegisterMode) {
+                    const idade = document.getElementById('age-field').value;
+                    const sexo = document.getElementById('gender-field').value;
+                    if (!idade || !sexo) return alert("Preencha idade e sexo!");
+                    
+                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                    await sendEmailVerification(cred.user);
+                    await saveUserData(cred.user, { idade, sexo });
+                    alert("Verifique seu e-mail para ativar a conta!");
+                } else {
+                    const cred = await signInWithEmailAndPassword(auth, email, pass);
+                    if (!cred.user.emailVerified) return alert("E-mail não verificado!");
+                }
+            } catch (e) { alert(e.message); }
+        };
+
+        document.getElementById('btn-google').onclick = async () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                await saveUserData(result.user);
+            } catch (e) { console.error(e); }
+        };
+
+        document.getElementById('btn-facebook').onclick = async () => {
+            try {
+                const provider = new FacebookAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                await saveUserData(result.user);
+            } catch (e) { console.error(e); }
+        };
+
+        window.processAIChat = async () => {
+            const input = document.getElementById('ai-input');
+            const log = document.getElementById('chat-log');
+            const text = input.value.trim();
+            if (!text) return;
+
+            log.innerHTML += `<div class="message message-user">${text}</div>`;
+            input.value = '';
+            log.scrollTop = log.scrollHeight;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CONFIG.GEMINI_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text }] }] })
+                });
+                const data = await response.json();
+                const aiText = data.candidates[0].content.parts[0].text;
+                log.innerHTML += `<div class="message message-ai">${aiText.replace(/\n/g, '<br>')}</div>`;
+            } catch (e) {
+                log.innerHTML += `<div class="message message-ai" style="color:var(--error-ui)">Ocorreu um erro ao processar sua dúvida.</div>`;
             }
-            switchView('dashboard');
-        } catch (e) { alert("Dados incorretos!"); }
-    };
+            log.scrollTop = log.scrollHeight;
+        };
 
-    window.perguntarIA = async () => {
-        const p = document.getElementById('user-prompt');
-        const log = document.getElementById('chat-log');
-        const msg = p.value;
-        if(!msg) return;
+        window.handleChatEnter = (e) => { if (e.key === 'Enter') window.processAIChat(); };
 
-        log.innerHTML += `<div class="bubble user-b">${msg}</div>`;
-        p.value = "";
+        onAuthStateChanged(auth, async (user) => {
+            if (user && (user.emailVerified || user.providerData[0].providerId !== 'password')) {
+                document.getElementById('view-auth').classList.remove('active');
+                document.getElementById('view-dashboard').classList.add('active');
+                const snapshot = await get(ref(db, `usuarios/${user.uid}`));
+                document.getElementById('user-display-name').innerText = snapshot.exists() ? `Olá, ${snapshot.val().nome}` : `Olá, ${user.displayName || 'Usuário'}`;
+            } else {
+                document.getElementById('view-auth').classList.add('active');
+                document.getElementById('view-dashboard').classList.remove('active');
+            }
+        });
 
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CONFIG.GEMINI_KEY}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: msg }] }] })
-            });
-            const data = await res.json();
-            const responseText = data.candidates[0].content.parts[0].text;
-            log.innerHTML += `<div class="bubble ai-b">${responseText.replace(/\n/g, '<br>')}</div>`;
-        } catch (e) { log.innerHTML += `<div class="bubble ai-b" style="color:red">Erro na conexão.</div>`; }
-        log.scrollTop = log.scrollHeight;
-    };
-
-    onAuthStateChanged(auth, (user) => {
-        if (user && user.emailVerified) switchView('dashboard');
-    });
-
-    window.sair = () => signOut(auth).then(() => location.reload());
-    window.switchView = (id) => {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    };
-  </script>
+        window.handleLogout = () => signOut(auth);
+    </script>
 </body>
 </html>
